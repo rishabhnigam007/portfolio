@@ -1,0 +1,152 @@
+RISHABH NIGAM PORTFOLIO - DEPLOYMENT GUIDE
+
+This project is a static HTML/CSS site. GitHub Pages hosting can be free; a custom domain registration usually has an annual fee. You do not need a server, database, or paid hosting plan for this portfolio.
+
+BEFORE PUBLISHING
+
+1. Review the public content in the site, especially your email address, portrait, experience, and project metrics. Anything published on GitHub Pages is public.
+2. Open PowerShell in the project folder:
+   D:\Rishabh_Portfolio
+3. Build the Tailwind stylesheet:
+
+   npm install
+   npm run build
+
+4. Confirm these files are present at the project root:
+   index.html
+   styles.css
+   tailwind.css
+   profile-pic.jpg
+5. The project ignores node_modules. Do not upload node_modules or passwords, API keys, or other secrets.
+
+PART 1 - PUBLISH ON GITHUB PAGES
+
+A. Create the repository
+
+1. Sign in to GitHub and create a new repository.
+2. For the cleanest URL, name it exactly:
+   YOUR_GITHUB_USERNAME.github.io
+   Your GitHub username is not necessarily the same as your LinkedIn username.
+3. Choose Public if you are using GitHub Free. GitHub Pages websites are public on the internet.
+4. If you already have this project locally, create the GitHub repository without adding a README, license, or .gitignore. This avoids a first-push conflict.
+
+B. Push this project from PowerShell
+
+Run these commands from D:\Rishabh_Portfolio. Replace YOUR_GITHUB_USERNAME and REPOSITORY_NAME with your actual values.
+
+First, check whether this folder already has Git set up:
+
+   git status
+
+If Git says this is not a repository, initialize it:
+
+   git init
+
+Then build and commit the site:
+
+   npm install
+   npm run build
+   git add .
+   git commit -m "Publish portfolio"
+   git branch -M main
+
+Connect the local project to the empty GitHub repository and push:
+
+   git remote add origin https://github.com/YOUR_GITHUB_USERNAME/REPOSITORY_NAME.git
+   git push -u origin main
+
+If the project already has an origin remote, inspect it with `git remote -v` and use `git remote set-url origin https://github.com/YOUR_GITHUB_USERNAME/REPOSITORY_NAME.git` instead of adding another origin.
+
+C. Turn on GitHub Pages
+
+1. Open the repository on GitHub.
+2. Select Settings, then Pages.
+3. Under Build and deployment, choose Deploy from a branch.
+4. Choose branch main and folder /(root), then save.
+5. Wait for the Pages build to finish. The URL will be:
+   https://YOUR_GITHUB_USERNAME.github.io/
+6. Open the URL and check the portrait, CSS, menu, section links, email link, and inquiry form.
+   A first deployment or update can take several minutes.
+
+If you prefer a repository named portfolio or rishabh-portfolio instead, the URL will include the repository name:
+   https://YOUR_GITHUB_USERNAME.github.io/REPOSITORY_NAME/
+
+D. Publish future edits
+
+Whenever you change the site, run these commands from the project folder:
+
+   npm run build
+   git add .
+   git commit -m "Update portfolio"
+   git push
+
+GitHub Pages will redeploy after the push. Do not commit if Git reports there are no changes.
+
+PART 2 - BUY AND CONNECT A DOMAIN LATER
+
+A. Choose and register a domain
+
+1. Possible names to check (availability is not guaranteed):
+   rishabhnigam.dev
+   rishabhnigam.com
+2. Compare renewal prices, privacy options, and DNS management at a registrar such as Cloudflare Registrar, Porkbun, or Namecheap. The domain registration is paid; GitHub Pages hosting remains free.
+3. Decide which address should be the main one. A common choice is www.YOUR_DOMAIN with the bare YOUR_DOMAIN redirecting to it, or the reverse.
+
+B. Verify ownership with GitHub first
+
+1. On GitHub, open your profile Settings, then Pages, and choose Add a domain.
+2. Enter YOUR_DOMAIN and follow GitHub's instructions to add the verification TXT record at your registrar.
+3. Keep the TXT record after GitHub confirms verification. Domain verification helps prevent another GitHub account from claiming your domain for Pages.
+
+C. Add the custom domain to the repository
+
+1. Open the portfolio repository: Settings, then Pages.
+2. In Custom domain, enter the chosen main address, for example www.YOUR_DOMAIN, and save.
+3. For branch-based publishing, GitHub may create a CNAME file in the repository. If GitHub creates a commit, pull it before your next local push so the change is not overwritten.
+
+D. Add DNS records at your registrar
+
+For the bare/root domain YOUR_DOMAIN, add these four A records. The host/name is usually @:
+
+   A   @   185.199.108.153
+   A   @   185.199.109.153
+   A   @   185.199.110.153
+   A   @   185.199.111.153
+
+For the www subdomain, add a CNAME record. Replace YOUR_GITHUB_USERNAME with the account username:
+
+   CNAME   www   YOUR_GITHUB_USERNAME.github.io
+
+The CNAME target is the GitHub Pages account hostname; do not add the repository name. Remove conflicting default A, AAAA, or CNAME records for the same host. Do not create wildcard DNS records.
+
+GitHub also supports the following AAAA records for IPv6. These are optional; use GitHub's current documentation when configuring them:
+
+   AAAA   @   2606:50c0:8000::153
+   AAAA   @   2606:50c0:8001::153
+   AAAA   @   2606:50c0:8002::153
+   AAAA   @   2606:50c0:8003::153
+
+E. Verify DNS and HTTPS
+
+1. DNS updates can take up to 24 hours to propagate.
+2. On Windows PowerShell, check the records with:
+
+   Resolve-DnsName YOUR_DOMAIN -Type A
+   Resolve-DnsName www.YOUR_DOMAIN -Type CNAME
+
+3. Return to repository Settings, Pages. Wait until GitHub recognizes the custom domain and HTTPS is available.
+4. Turn on Enforce HTTPS.
+5. Test both https://YOUR_DOMAIN and https://www.YOUR_DOMAIN. Confirm one redirects to your chosen main address and the site image, styles, navigation, and links all work.
+
+Do not remove the GitHub Pages DNS records while the custom domain is attached to the repository. If you later stop using Pages, remove the custom domain from GitHub and update or remove the DNS records to avoid domain takeover risks.
+
+OFFICIAL REFERENCES
+
+GitHub Pages setup:
+https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site
+
+Custom domains and DNS:
+https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site
+
+Verify a domain:
+https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages
